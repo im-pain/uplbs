@@ -15,7 +15,7 @@ bl_info = {
     "name" : "Lightning Boy Shader",
     "author" : "Lightning Boy Studio, Kolupsy",
     "description" : "by vfxmed.com A layer-based shader system to create various NPR styles.",
-    "blender" : (2, 93, 0),
+    "blender" : (4, 5, 0),
     "version" : (2, 1, 3),
     "location" : "Shader Editor (N to access panel, Shift-A to create nodes)",
     "warning" : "",
