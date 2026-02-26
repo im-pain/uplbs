@@ -99,7 +99,7 @@ def update_node_tree_object( self, context ):
     obj = self.lbs_ref_object
     obj.use_fake_user = True
     for n in (x for x in self.nodes if "driven" in x.name ):
-        if hasattr( self.animation_data, "drivers" ):
+        if self.animation_data and self.animation_data.drivers:
             for d in self.animation_data.drivers:
                 if "driven_transforms" in d.data_path:
                     d.driver.variables[0].targets[0].id = self.lbs_ref_object

@@ -36,11 +36,12 @@ class LBSColorNode( LBSLayeredNode ):
         mask_inp.hide_value = True
         inputs.move( len( inputs ) -1, 0 )
         inputs.move( len( inputs ) -1, 0 )
-        new_mix = no.new( "ShaderNodeMixRGB" )
-        li.new( input.outputs[0], new_mix.inputs[2])
+        new_mix = no.new( "ShaderNodeMix" )
+        new_mix.data_type = 'RGBA'
+        li.new( input.outputs[0], new_mix.inputs[7])
         li.new( input.outputs[1], new_mix.inputs[0])
-        li.new( connect_socket, new_mix.inputs[1])
-        li.new( new_mix.outputs[0], add.inputs[1])
+        li.new( connect_socket, new_mix.inputs[6])
+        li.new( new_mix.outputs[2], add.inputs[1])
     
     def remove_layer( self ):
 
