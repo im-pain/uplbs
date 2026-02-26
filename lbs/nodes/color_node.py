@@ -26,16 +26,15 @@ class LBSColorNode( LBSLayeredNode ):
         nt = self.node_tree
         no = nt.nodes
         li = nt.links
-        inputs = nt.inputs
         input = no["input"]
         add = no["add"]
         connect_socket = add.inputs[1].links[0].from_socket
 
-        inputs.new( "NodeSocketColor", f'Color {layers + 1}' )
-        mask_inp = inputs.new( "NodeSocketFloat", "└──" )
+        new_color = nt.interface.new_socket( name = f'Color {layers + 1}', in_out = 'INPUT', socket_type = 'NodeSocketColor' )
+        mask_inp = nt.interface.new_socket( name = '└──', in_out = 'INPUT', socket_type = 'NodeSocketFloat' )
         mask_inp.hide_value = True
-        inputs.move( len( inputs ) -1, 0 )
-        inputs.move( len( inputs ) -1, 0 )
+        nt.interface.move( mask_inp, 0 )
+        nt.interface.move( new_color, 0 )
         new_mix = no.new( "ShaderNodeMix" )
         new_mix.data_type = 'RGBA'
         li.new( input.outputs[0], new_mix.inputs[7])
@@ -48,12 +47,12 @@ class LBSColorNode( LBSLayeredNode ):
         nt = self.node_tree
         no = nt.nodes
         li = nt.links
-        inputs = nt.inputs  
         add = no["add"]
         old_mix = add.inputs[1].links[0].from_node
         connect_socket = old_mix.inputs[1].links[0].from_socket
-        inputs.remove( inputs[0] )
-        inputs.remove( inputs[0] )
+        input_items = [ item for item in nt.interface.items_tree if item.item_type == 'SOCKET' and item.in_out == 'INPUT' ]
+        nt.interface.remove( input_items[1] )
+        nt.interface.remove( input_items[0] )
         no.remove( old_mix )
         li.new( connect_socket, add.inputs[ 1 ])
         

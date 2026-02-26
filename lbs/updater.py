@@ -47,10 +47,10 @@ class LBS_OT_update_outdated_nodes( NodeEditorOp ):
             nt.links.new( rgb_socket, n.inputs[ 0 ])
             nt.links.new( n.outputs[ 0 ], mix_socket )
         
-        for nt in ( x for x in bpy.data.node_groups if x.name.startswith( '.Halftone Style' ) and not 'Rotation' in x.inputs.keys( )):
+        for nt in ( x for x in bpy.data.node_groups if x.name.startswith( '.Halftone Style' ) and not 'Rotation' in [ item.name for item in x.interface.items_tree if item.item_type == 'SOCKET' and item.in_out == 'INPUT' ]):
             updates.add( 'Updated Halftone Style nodes to include a "Rotation" input.' )
-            nt.inputs.new( 'NodeSocketFloat', 'Rotation' )
-            nt.inputs.move( len( nt.inputs ) - 1, 3 )
+            new_inp = nt.interface.new_socket( name = 'Rotation', in_out = 'INPUT', socket_type = 'NodeSocketFloat' )
+            nt.interface.move( new_inp, 3 )
             mapping = next( x for x in nt.nodes if x.bl_idname == 'ShaderNodeMapping' )
             rot_socket = mapping.inputs[2]
             combine = nt.nodes.new( 'ShaderNodeCombineXYZ' )

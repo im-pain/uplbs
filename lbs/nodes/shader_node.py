@@ -94,14 +94,13 @@ class LBSShaderNode( LBSInstancedNode, LBSLayeredNode ):
         nt = self.node_tree
         no = nt.nodes
         li = nt.links
-        inputs = nt.inputs
         input = no["input"]
         mix = no["global_settings"]
         connect_socket = mix.inputs[0].links[0].from_socket
 
         spaces = " " if layers + 1 >= 10 else "  "
-        new_inp = inputs.new( "NodeSocketShader", f'――――――{spaces}{layers + 1}' )
-        inputs.move( len( inputs ) -1, 1 )
+        new_inp = nt.interface.new_socket( name = f'――――――{spaces}{layers + 1}', in_out = 'INPUT', socket_type = 'NodeSocketShader' )
+        nt.interface.move( new_inp, 1 )
         new_layer = no.new( "ShaderNodeGroup" )
         new_layer.node_tree = bpy.data.node_groups[".LBS Layer"]
         li.new( input.outputs[1], new_layer.inputs[0])  
@@ -113,11 +112,11 @@ class LBSShaderNode( LBSInstancedNode, LBSLayeredNode ):
         nt = self.node_tree
         no = nt.nodes
         li = nt.links
-        inputs = nt.inputs  
         mix = no["global_settings"]
         old_layer = mix.inputs[0].links[0].from_node
         connect_socket = old_layer.inputs[1].links[0].from_socket
-        inputs.remove( inputs[1] )
+        input_items = [ item for item in nt.interface.items_tree if item.item_type == 'SOCKET' and item.in_out == 'INPUT' ]
+        nt.interface.remove( input_items[1] )
         no.remove( old_layer )
         li.new( connect_socket, mix.inputs[0])
 

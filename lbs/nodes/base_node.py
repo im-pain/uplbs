@@ -58,7 +58,7 @@ class LBSStandardNode( LBSInstancedNode ):
 
         if not self.node_tree["lbs_has_global_settings"] in [ 0, 1 ]:
             self.copy_node_tree( self )
-        if ".channel" in self.node_tree.inputs.keys( ):
+        if ".channel" in [ item.name for item in self.node_tree.interface.items_tree if item.item_type == 'SOCKET' and item.in_out == 'INPUT' ]:
             self.inputs[".channel"].enabled = False
     
     def on_cleanup(self, cleanup ):
